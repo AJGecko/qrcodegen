@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta description="A simple QR code generator with customizable colors and download options.">
     <title>QrCodeGen</title>
 </head>
 <body>
@@ -44,13 +45,14 @@
             <option value="1200">1200x1200 (High)</option>
         </select>
         <div style="color: #ffffff; font-size: smaller; margin-top: 0.5em; max-width: 12em; text-align: center;">
-        The resolution only affects the the the look of the png format.
+        The resolution only affects the look of the png format.
         </div>
         </div>
     </div>
     <br>
 </body>
 </html>
+
 <style>
     * {
         box-sizing: border-box;
@@ -58,7 +60,6 @@
 
     hr {
         width: 95%;
-        
         border: 1px solid #ffffff;
     }
 
@@ -146,6 +147,8 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
+
+    // Create a new QRCode instance
     var qrcode = new QRCode("qrcode", {       
         colorDark : "#ffffff",        
         colorLight : "#000000",
@@ -153,6 +156,8 @@
         width : 256,        
         correctLevel : QRCode.CorrectLevel.H         
     });
+
+    // Function to generate QR code
     function genqrcode() {
         var content = document.getElementById("input")
         if (!content.value) {
@@ -169,6 +174,8 @@
         var currentcontent = document.getElementById("currentcontent");
         currentcontent.innerHTML = content.value;
     };
+
+    // Function to download the QR code as an image
     function download() {
 
         if (document.querySelector("select").value === "svg") {
@@ -202,6 +209,8 @@
         document.body.removeChild(dlink);
     
     }
+
+    // Function to download the QR code as an SVG
     function downloadSVG() {
         var img = document.getElementById("qrcode").querySelector("img");
         var content = document.getElementById("currentcontent").innerHTML;
@@ -223,6 +232,5 @@
         dlink.click();
         document.body.removeChild(dlink);
     }
-    
 
 </script>
