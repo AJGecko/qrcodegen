@@ -16,7 +16,7 @@
     <br>
     <button onclick="genqrcode()">Generate</button>
     <br>
-    <div style="background-color: rgb(115, 115, 115); padding: 1em; color: #ffffff; border-radius: 1em; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: larger; max-width: 20em; text-align: center;">
+    <div style="background-color: rgb(115, 115, 115); padding: 1em; color: #ffffff; border-radius: 1em; display: flex; flex-direction: column; align-items: center; justify-content: center; font-si[...]
         <div style="color: #ffffff; font-size: larger;">
             Color1: <input id="color1" class="colorinput" type="color" value="#000000">
         </div>
@@ -27,7 +27,7 @@
         It's recommended to use a dark color for Color1 and a light color for Color2.
     </div>
     <br>
-    <div style="background-color: rgb(115, 115, 115); padding: 1em; color: #ffffff; border-radius: 1em; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: larger; max-width: 20em; text-align: center;">
+    <div style="background-color: rgb(115, 115, 115); padding: 1em; color: #ffffff; border-radius: 1em; display: flex; flex-direction: column; align-items: center; justify-content: center; font-si[...]
         <h3>Correction Level:</h3>
         <select id="correctionLevelSelect">
             <option value="L">L (Low)</option>
@@ -44,7 +44,7 @@
     <button onclick="download()">Download</button>
     <div class="format">
         <h3>Format:</h3>
-        <select>
+        <select id="formatSelect">
             <option value="png">PNG</option>
             <option value="svg">SVG</option>
         </select>
@@ -190,8 +190,7 @@
 
     // Function to download the QR code as an image
     function download() {
-
-        if (document.querySelector("select").value === "svg") {
+        if (document.getElementById("formatSelect").value === "svg") {
             downloadSVG();
             return;
         }
@@ -214,8 +213,9 @@
 
 
         dlink.href = downloadCanvas.toDataURL("image/png");
-        dname = currentcontent.innerHTML +".png"
-        dlink.download = dname
+        var currentcontent = document.getElementById("currentcontent");
+        var dname = currentcontent.innerHTML + ".png";
+        dlink.download = dname;
 
         document.body.appendChild(dlink);
         dlink.click();
