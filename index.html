@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta description="A simple QR code generator with customizable colors and download options.">
+    <meta name="description" content="A simple QR code generator with customizable colors and download options.">
     <title>QrCodeGen</title>
 </head>
 <body>
     <h1 style="color: #ffffff;">QrCode Generator</h1>
-    <input id="input" class="textinput" type="text" placeholder="Input a text">
+    <input id="input" class="textinput" type="text" placeholder="Text hier eingeben">
     <br>
-    <div id="qrcode" class="qrcode" ></div>
-    <div style="color: #ffffff; font-size: x-large ;">Current content:</div>
-    <div id="currentcontent" style="color: #ffffff; font-size: larger ; background-color: rgb(82, 82, 82); padding: 0.5em;">-</div>
+    <div id="qrcode" class="qrcode"></div>
+    <div style="color: #ffffff; font-size: x-large;">Current content:</div>
+    <div id="currentcontent" style="color: #ffffff; font-size: larger; background-color: rgb(82, 82, 82); padding: 0.5em;">-</div>
     <br>
     <button onclick="genqrcode()">Generate</button>
     <br>
@@ -36,7 +36,7 @@
             <option value="H">H (High)</option>
         </select>
         <br>
-        How higher the correction level, the more data can be restored if the QR code is damaged, but the QR code will be more complex.
+        The higher the correction level, the more data can be restored if the QR code is damaged, but the QR code will be more complex.
     </div>
     <br>
     <hr>
@@ -44,20 +44,20 @@
     <button onclick="download()">Download</button>
     <div class="format">
         <h3>Format:</h3>
-        <select>
+        <select id="formatSelect">
             <option value="png">PNG</option>
             <option value="svg">SVG</option>
         </select>
         <div class="resolution">
-        <h3>Resolution:</h3>
-        <select id="resolutionSelect">
-            <option value="800">800x800 (Normal)</option>
-            <option value="400">400x400 (Low)</option>
-            <option value="1200">1200x1200 (High)</option>
-        </select>
-        <div style="color: #ffffff; margin-top: 0.5em; max-width: 12em; text-align: center;">
-        The resolution only affects the look of the png format.
-        </div>
+            <h3>Resolution:</h3>
+            <select id="resolutionSelect">
+                <option value="800">800x800 (Normal)</option>
+                <option value="400">400x400 (Low)</option>
+                <option value="1200">1200x1200 (High)</option>
+            </select>
+            <div style="color: #ffffff; margin-top: 0.5em; max-width: 12em; text-align: center;">
+                The resolution only affects the look of the png format.
+            </div>
         </div>
     </div>
     <br>
@@ -154,12 +154,11 @@
         padding: 0.5em;
         color: #ffffff;
     }
-
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
-
-    // Create a new QRCode instance
+    // Initialisiere QR-Code
     var qrcode = new QRCode("qrcode", {       
         colorDark : "#ffffff",        
         colorLight : "#000000",
@@ -168,30 +167,30 @@
         correctLevel : QRCode.CorrectLevel.H         
     });
 
-    // Function to generate QR code
     function genqrcode() {
-        var content = document.getElementById("input")
+        var content = document.getElementById("input");
         if (!content.value) {
             alert("Input a text");
             content.focus();
             return;
         }
-        color1 = document.getElementById("color1");
-        color2 = document.getElementById("color2");
+        // FIX: Deklaration mit 'var' oder 'let'
+        var color1 = document.getElementById("color1");
+        var color2 = document.getElementById("color2");
         qrcode._htOption.colorDark = color1.value;   
         qrcode._htOption.colorLight = color2.value;
-        correctionLevel = document.getElementById("correctionLevelSelect");
+        
+        var correctionLevel = document.getElementById("correctionLevelSelect");
         qrcode._htOption.correctLevel = QRCode.CorrectLevel[correctionLevel.value]; 
         qrcode.makeCode(content.value);
         
         var currentcontent = document.getElementById("currentcontent");
         currentcontent.innerHTML = content.value;
-    };
+    }
 
-    // Function to download the QR code as an image
     function download() {
-
-        if (document.querySelector("select").value === "svg") {
+        // FIX: Nutzt jetzt gezielt 'formatSelect'
+        if (document.getElementById("formatSelect").value === "svg") {
             downloadSVG();
             return;
         }
@@ -206,24 +205,23 @@
         
         var downloadCanvas = document.createElement("canvas");
         var ctx = downloadCanvas.getContext("2d");
-
-        var dlink = document.createElement("a")
+        var dlink = document.createElement("a");
+        
         downloadCanvas.width = document.getElementById("resolutionSelect").value;
         downloadCanvas.height = document.getElementById("resolutionSelect").value;
         ctx.drawImage(img, 0, 0, downloadCanvas.width, downloadCanvas.height);
 
-
+        var currentcontent = document.getElementById("currentcontent");
         dlink.href = downloadCanvas.toDataURL("image/png");
-        dname = currentcontent.innerHTML +".png"
-        dlink.download = dname
+        // FIX: Deklaration mit 'var'
+        var dname = currentcontent.innerHTML + ".png";
+        dlink.download = dname;
 
         document.body.appendChild(dlink);
         dlink.click();
         document.body.removeChild(dlink);
-    
     }
 
-    // Function to download the QR code as an SVG
     function downloadSVG() {
         var img = document.getElementById("qrcode").querySelector("img");
         var content = document.getElementById("currentcontent").innerHTML;
@@ -233,7 +231,8 @@
             return;
         }
 
-        var svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${document.getElementById("resolutionSelect").value}" height="${document.getElementById("resolutionSelect").value}" viewBox="0 0 256 256">
+        var resolution = document.getElementById("resolutionSelect").value;
+        var svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="${resolution}" height="${resolution}" viewBox="0 0 256 256">
             <image href="${img.src}" x="0" y="0" width="256" height="256" style="image-rendering: pixelated;" />
         </svg>`;
 
@@ -245,5 +244,4 @@
         dlink.click();
         document.body.removeChild(dlink);
     }
-
 </script>
