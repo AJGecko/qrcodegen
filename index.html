@@ -184,6 +184,27 @@
         
         var currentcontent = document.getElementById("currentcontent");
         currentcontent.innerHTML = content.value;
+
+        setTimeout(function() {
+            var qrContainer = document.getElementById("qrcode");
+            var canvas = qrContainer.querySelector("canvas");
+            var img = qrContainer.querySelector("img");
+
+            if (canvas && (!img || !img.src)) {
+                if (!img) {
+                    img = document.createElement("img");
+                    qrContainer.appendChild(img);
+                }
+                img.src = canvas.toDataURL("image/png");
+                canvas.style.display = "none";
+                img.style.display = "block";
+            } 
+            else if (canvas && img) {
+                img.src = canvas.toDataURL("image/png");
+                canvas.style.display = "none";
+                img.style.display = "block";
+            }
+        }, 100);
     }
 
     function download() {
